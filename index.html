@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Free AI Fitness Coach</title>
+    <style>
+        body { font-family: Arial, max-width: 600px; margin: 0 auto; padding: 20px; }
+        button { padding: 10px 15px; background: #4CAF50; color: white; border: none; cursor: pointer; }
+        video { width: 100%; margin-top: 20px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>AI Fitness Coach</h1>
+    <select id="workout">
+        <option value="yoga">Yoga</option>
+        <option value="hiit">HIIT</option>
+    </select>
+    <button onclick="generateVideo()">Generate Workout</button>
+    
+    <video id="output" controls></video>
+    <p id="status"></p>
+
+    <script>
+        async function generateVideo() {
+            const workout = document.getElementById("workout").value;
+            document.getElementById("status").innerText = "Generating...";
+            
+            try {
+                // Replace with your PythonAnywhere backend URL
+                const response = await fetch(
+                    "https://yourusername.pythonanywhere.com/generate",
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ workout: workout })
+                    }
+                );
+                
+                const blob = await response.blob();
+                document.getElementById("output").src = URL.createObjectURL(blob);
+                document.getElementById("status").innerText = "Done!";
+            } catch (e) {
+                document.getElementById("status").innerText = "Error: " + e.message;
+            }
+        }
+    </script>
+</body>
+</html>
